@@ -47,7 +47,14 @@ get '/api/produk/:id' do
   content_type :json
   produk = Produk[params[:id]]
   if produk
-    produk.to_json
+    {
+      id_produk: produk.id_produk,
+      nama_produk: produk.nama_produk,
+      quantity: produk.quantity,
+      harga_per_pcs: produk.harga_per_pcs,
+      kategori: produk.kategori.nama_kategori,
+      pemasok: produk.pemasok.nama_pemasok
+    }.to_json
   else
     status 404
     { message: 'Produk not found' }.to_json
