@@ -6,39 +6,39 @@ require 'json'
 DB = Sequel.connect(adapter: :postgres, host: 'localhost', user: 'postgres', password: '', database: 'ims_db')
 
 # Model untuk tabel kategori
-class Kategori < Sequel::Model
-  one_to_many :produks
+class Kategori < Sequel::Model(:kategori)
+  one_to_many :produks, key: :kategori_id
 end
 
 # Model untuk tabel pemasok
-class Pemasok < Sequel::Model
-  one_to_many :produks
+class Pemasok < Sequel::Model(:pemasok)
+  one_to_many :produks, key: :pemasok_id
 end
 
 # Model untuk tabel produk
-class Produk < Sequel::Model
-  many_to_one :kategori
-  many_to_one :pemasok
+class Produk < Sequel::Model(:produk)
+  many_to_one :kategori, key: :kategori_id
+  many_to_one :pemasok, key: :pemasok_id
 end
 
 # Menampilkan daftar kategori
 get '/api/kategori' do
   content_type :json
-  kategori = Kategori.all
+  kategori = Kategori.all.map(&:values)
   kategori.to_json
 end
 
 # Menampilkan daftar pemasok
 get '/api/pemasok' do
   content_type :json
-  pemasok = Pemasok.all
+  pemasok = Pemasok.all.map(&:values)
   pemasok.to_json
 end
 
 # Menampilkan daftar produk
 get '/api/produk' do
   content_type :json
-  produk = Produk.all
+  produk = Produk.all.map(&:values)
   produk.to_json
 end
 
